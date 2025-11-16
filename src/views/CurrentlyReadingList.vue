@@ -27,3 +27,25 @@ import EmptyScreen from '@/components/EmptyScreen.vue'
 const books = ref([])
 const addBook = () => console.log('Add book')
 </script>
+
+<style scoped lang="scss">
+.currently-reading {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #1e293b, #475569);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+</style>

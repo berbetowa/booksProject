@@ -20,9 +20,7 @@
       </nav>
     </aside>
     <main class="main-content">
-      <div class="container">
         <router-view />
-      </div>
     </main>
   </div>
 </template>
@@ -41,5 +39,156 @@ const menuItems = [
 </script>
 
 <style lang="scss">
-@import './assets/scss/global.scss';
+@use './assets/scss/global.scss' as *;
+
+#app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  position: sticky;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 16rem;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.sidebar-header {
+  margin-bottom: 2.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(to bottom right, #22d3ee, #3b82f6, #9333ea);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5);
+  transform: rotate(6deg);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: rotate(0deg);
+  }
+
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: white;
+    transform: rotate(-6deg);
+  }
+}
+
+.logo-text {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    line-height: 1;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    background: rgba(51, 65, 85, 0.5);
+    color: white;
+
+    svg {
+      transform: scale(1.1);
+    }
+  }
+
+  &.router-link-active {
+    background: linear-gradient(to right, #3b82f6, #9333ea);
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+
+    svg {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.sidebar-footer {
+  padding-top: 1.5rem;
+  border-top: 1px solid #334155;
+}
+
+.version-info {
+  padding: 0.75rem 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 0.75rem;
+
+  p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+
+    &.copyright {
+      color: #64748b;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.main-content {
+  flex: 1;
+  width: calc(100% - 16rem);
+  padding: 2.5rem;
+}
 </style>
