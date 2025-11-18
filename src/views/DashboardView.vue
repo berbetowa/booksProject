@@ -34,7 +34,7 @@
             <ShoppingBag />
           </div>
           <div>
-            <h2>Куплено в {{ currentMonthName }}</h2>
+            <h2>Мои покупки</h2>
             <p class="subtitle">{{ purchasedBooks.length }} {{ bookWord(purchasedBooks.length) }}</p>
           </div>
         </div>
@@ -192,7 +192,7 @@ interface PurchasedBook {
   author: string
   purchaseDate: string
   cover: string | null
-  month: string // формат: "2024-11"
+  month: string
 }
 
 const stats = ref([
@@ -216,31 +216,18 @@ const newPurchasedBook = ref({
   author: '',
   purchaseDate: new Date().toISOString().split('T')[0]
 })
-
-const currentMonthName = computed(() => {
-  const months = [
-    'январе', 'феврале', 'марте', 'апреле', 'мае', 'июне',
-    'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'
-  ]
-  return months[new Date().getMonth()]
-})
-
 const bookWord = (count: number) => {
   if (count % 10 === 1 && count % 100 !== 11) return 'книга'
   if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'книги'
   return 'книг'
 }
 
-// Проверка и очистка книг при смене месяца
 onMounted(() => {
-  const currentMonth = new Date().toISOString().slice(0, 7)
   const stored = localStorage.getItem('purchasedBooks')
   if (stored) {
     try {
       const allPurchased = JSON.parse(stored)
-      const currentMonthBooks = allPurchased.filter((book: PurchasedBook) => book.month === currentMonth)
-      purchasedBooks.value = currentMonthBooks
-      localStorage.setItem('purchasedBooks', JSON.stringify(currentMonthBooks))
+      purchasedBooks.value = allPurchased
     } catch (e) {
       console.error('Error loading purchased books:', e)
     }
@@ -254,7 +241,7 @@ const addPurchasedBook = () => {
   }
 
   const date = new Date(newPurchasedBook.value.purchaseDate)
-  const currentMonth = new Date().toISOString().slice(0, 7)
+  const purchaseMonth = date.toISOString().slice(0, 7)
 
   const book: PurchasedBook = {
     id: Date.now(),
@@ -262,22 +249,19 @@ const addPurchasedBook = () => {
     author: newPurchasedBook.value.author,
     purchaseDate: date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }),
     cover: null,
-    month: currentMonth
+    month: purchaseMonth
   }
 
   purchasedBooks.value.push(book)
 
-  // Сохраняем в localStorage
   const stored = localStorage.getItem('purchasedBooks')
   const allPurchased = stored ? JSON.parse(stored) : []
   allPurchased.push(book)
   localStorage.setItem('purchasedBooks', JSON.stringify(allPurchased))
 
-  // Отправляем событие для UnreadBooks
   const event = new CustomEvent('bookPurchased', { detail: book })
   window.dispatchEvent(event)
 
-  // Сброс формы
   newPurchasedBook.value = {
     title: '',
     author: '',
@@ -291,7 +275,6 @@ const deletePurchasedBook = (book: PurchasedBook) => {
   if (index > -1) {
     purchasedBooks.value.splice(index, 1)
 
-    // Удаляем из localStorage
     const stored = localStorage.getItem('purchasedBooks')
     if (stored) {
       const allPurchased = JSON.parse(stored)
@@ -303,7 +286,6 @@ const deletePurchasedBook = (book: PurchasedBook) => {
 
 const startReading = (book: PurchasedBook) => {
   console.log('Start reading:', book)
-  // Здесь будет логика добавления в "Читаю сейчас" и удаления из купленных
 }
 
 const addBook = () => {
@@ -383,7 +365,6 @@ const addBook = () => {
   font-weight: 600;
 }
 
-// Виджет купленных книг
 .purchased-books-section {
   background: white;
   border-radius: 1.5rem;
@@ -555,7 +536,6 @@ const addBook = () => {
   }
 }
 
-// Модальное окно
 .modal-overlay {
   position: fixed;
   inset: 0;

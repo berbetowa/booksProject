@@ -104,15 +104,9 @@ const books = ref<UnreadBook[]>([
   },
 ])
 
-// Загрузка купленных книг из localStorage при монтировании
 onMounted(() => {
   loadPurchasedBooks()
-  // Слушаем события добавления купленных книг
   window.addEventListener('bookPurchased', handleBookPurchased as EventListener)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('bookPurchased', handleBookPurchased as EventListener)
 })
 
 const loadPurchasedBooks = () => {
@@ -120,34 +114,33 @@ const loadPurchasedBooks = () => {
   if (stored) {
     try {
       const purchasedBooks = JSON.parse(stored)
-      const currentMonth = new Date().toISOString().slice(0, 7)
 
-      purchasedBooks
-          .filter((pb: any) => pb.month === currentMonth)
-          .forEach((purchasedBook: any) => {
-            const exists = books.value.find(b =>
-                b.title === purchasedBook.title && b.author === purchasedBook.author
-            )
+      purchasedBooks.forEach((purchasedBook: any) => {
+        const exists = books.value.find(b =>
+            b.title === purchasedBook.title && b.author === purchasedBook.author
+        )
 
-            if (!exists) {
-              books.value.unshift({
-                id: purchasedBook.id,
-                title: purchasedBook.title,
-                author: purchasedBook.author,
-                cover: purchasedBook.cover,
-                isPurchased: true,
-                purchaseMonth: getMonthName(purchasedBook.month) // Добавляем
-              })
-            }
+        if (!exists) {
+          books.value.unshift({
+            id: purchasedBook.id,
+            title: purchasedBook.title,
+            author: purchasedBook.author,
+            cover: purchasedBook.cover,
+            isPurchased: true,
+            purchaseMonth: getMonthName(purchasedBook.month)
           })
+        }
+      })
     } catch (e) {
       console.error('Error loading purchased books:', e)
     }
   }
 }
-// Загрузка купленных книг из localStorage
 
-// Обработчик события добавления купленной книги
+onUnmounted(() => {
+  window.removeEventListener('bookPurchased', handleBookPurchased as EventListener)
+})
+
 const handleBookPurchased = (event: CustomEvent) => {
   const purchasedBook = event.detail
 
@@ -162,7 +155,7 @@ const handleBookPurchased = (event: CustomEvent) => {
       author: purchasedBook.author,
       cover: purchasedBook.cover,
       isPurchased: true,
-      purchaseMonth: getMonthName(purchasedBook.month) // Добавляем
+      purchaseMonth: getMonthName(purchasedBook.month)
     })
   }
 }
@@ -185,7 +178,6 @@ const deleteBook = (book: UnreadBook) => {
   if (index > -1) {
     books.value.splice(index, 1)
 
-    // Если это купленная книга, удаляем её и из localStorage
     if (book.isPurchased) {
       const stored = localStorage.getItem('purchasedBooks')
       if (stored) {
