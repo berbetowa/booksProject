@@ -880,7 +880,7 @@ const addBook = () => {
 
 .goal-progress {
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 9999px;
+  border-radius: 99px;
   height: 1.25rem;
   overflow: hidden;
   backdrop-filter: blur(4px);
@@ -889,7 +889,7 @@ const addBook = () => {
   .goal-fill {
     height: 100%;
     background: linear-gradient(to right, white, #fef08a);
-    border-radius: 9999px;
+    border-radius: 99px;
     transition: width 0.5s ease;
   }
 }

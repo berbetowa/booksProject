@@ -4,7 +4,7 @@
       <div class="sidebar-header">
         <div class="logo">
           <div class="logo-icon">
-            <BookOpen />
+            <BookOpen/>
           </div>
           <div class="logo-text">
             <h1>BOOKS</h1>
@@ -14,37 +14,46 @@
       </div>
       <nav class="sidebar-nav">
         <router-link v-for="item in menuItems" :key="item.path" :to="item.path" class="nav-item">
-          <component :is="item.icon" />
+          <component :is="item.icon"/>
           <span>{{ item.label }}</span>
         </router-link>
       </nav>
     </aside>
     <main class="main-content">
-        <router-view />
+      <router-view/>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { BookOpen, TrendingUp, Calendar, Heart, BookMarked, CheckCircle } from 'lucide-vue-next'
+import {BookOpen, TrendingUp, Calendar, Heart, BookMarked, CheckCircle} from 'lucide-vue-next'
 
 const menuItems = [
-  { path: '/', label: 'Dashboard', icon: TrendingUp },
-  { path: '/reading', label: 'Currently Reading', icon: BookOpen },
-  { path: '/plans', label: 'Plans', icon: Calendar },
-  { path: '/wishlist', label: 'Wish List', icon: Heart },
-  { path: '/unread', label: 'Unread Books', icon: BookMarked },
-  { path: '/read', label: 'Read', icon: CheckCircle },
+  {path: '/', label: 'Dashboard', icon: TrendingUp},
+  {path: '/reading', label: 'Currently Reading', icon: BookOpen},
+  {path: '/plans', label: 'Plans', icon: Calendar},
+  {path: '/wishlist', label: 'Wish List', icon: Heart},
+  {path: '/unread', label: 'Unread Books', icon: BookMarked},
+  {path: '/read', label: 'Read', icon: CheckCircle},
 ]
 </script>
 
 <style lang="scss">
 @use './assets/scss/global.scss' as *;
 
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 #app {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -59,10 +68,31 @@ const menuItems = [
   flex-direction: column;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   z-index: 50;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
 }
+
 
 .sidebar-header {
   margin-bottom: 2.5rem;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -116,6 +146,21 @@ const menuItems = [
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
 }
 
 .nav-item {
@@ -128,6 +173,7 @@ const menuItems = [
   color: #cbd5e1;
   text-decoration: none;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 
   svg {
     width: 1.25rem;
@@ -167,6 +213,7 @@ const menuItems = [
 .sidebar-footer {
   padding-top: 1.5rem;
   border-top: 1px solid #334155;
+  flex-shrink: 0;
 }
 
 .version-info {
@@ -188,7 +235,31 @@ const menuItems = [
 
 .main-content {
   flex: 1;
-  width: calc(100% - 16rem);
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 2.5rem;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+
+  .container {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
 }
 </style>
